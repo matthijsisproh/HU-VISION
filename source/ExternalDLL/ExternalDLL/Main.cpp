@@ -20,14 +20,14 @@ int main(int argc, char* argv[]) {
 
 	std::string matthijsDebugFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\Github\\Vision\\HU-VISION\\output";
 	std::string erikDebugFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\output";
-	ImageIO::debugFolder = erikDebugFolder;
+	ImageIO::debugFolder = matthijsDebugFolder;
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
 
-	std::string matthijsImageFolder;
-	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\Set A\\TestSet Images\\child-1.png";
-	RGBImage* input = ImageFactory::newRGBImage();
-	if (!ImageIO::loadImage(erikImageFolder, *input)) {
+	std::string matthijsImageFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\GitHub\\Vision\\HU-VISION\\testsets\\Set A\\TestSet Images\\test-1.png";
+	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\Set A\\TestSet Images\\test-1.png";
+	IntensityImage* input = ImageFactory::newRGBImage();
+	if (!ImageIO::loadImage(matthijsImageFolder, *input)) {
 		std::cout << "Image could not be loaded!" << std::endl;
 		system("pause");
 		return 0;

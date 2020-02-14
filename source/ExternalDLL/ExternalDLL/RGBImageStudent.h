@@ -8,7 +8,6 @@
 #include "RGBImage.h"
 class RGBImageStudent : public RGBImage {
 public:
-
 	RGBImageStudent();
 	RGBImageStudent(const RGBImageStudent &other);
 	RGBImageStudent(const int width, const int height);
