@@ -10,23 +10,23 @@
 #include "ImageFactory.h"
 #include "DLLExecution.h"
 
-void drawFeatureDebugImage(IntensityImage &image, FeatureMap &features);
-bool executeSteps(DLLExecution * executor);
+void drawFeatureDebugImage(IntensityImage& image, FeatureMap& features);
+bool executeSteps(DLLExecution* executor);
 
-int main(int argc, char * argv[]) {
+int main(int argc, char* argv[]) {
 
 	ImageFactory::setImplementation(ImageFactory::DEFAULT);
 	//ImageFactory::setImplementation(ImageFactory::STUDENT);
 
 
-	ImageIO::debugFolder = "D:\\Users\\Rolf\\Downloads\\FaceMinMin";
+	ImageIO::debugFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\GitHub\\Vision\\HU-Vision-1819-Base\\output";
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
 
 
 
-	RGBImage * input = ImageFactory::newRGBImage();
-	if (!ImageIO::loadImage("D:\\Users\\Rolf\\Downloads\\TestA5.jpg", *input)) {
+	RGBImage* input = ImageFactory::newRGBImage();
+	if (!ImageIO::loadImage("C:\\Users\\Matthijs Koelewijn\\Documents\\GitHub\\Vision\\HU-VISION\\testsets\\Set A\\TestSet Images\\female-3.png", *input)) {
 		std::cout << "Image could not be loaded!" << std::endl;
 		system("pause");
 		return 0;
@@ -35,14 +35,14 @@ int main(int argc, char * argv[]) {
 
 	ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
 
-	DLLExecution * executor = new DLLExecution(input);
+	DLLExecution* executor = new DLLExecution(input);
 
 
 	if (executeSteps(executor)) {
 		std::cout << "Face recognition successful!" << std::endl;
 		std::cout << "Facial parameters: " << std::endl;
 		for (int i = 0; i < 16; i++) {
-			std::cout << (i+1) << ": " << executor->facialParameters[i] << std::endl;
+			std::cout << (i + 1) << ": " << executor->facialParameters[i] << std::endl;
 		}
 	}
 
@@ -52,7 +52,16 @@ int main(int argc, char * argv[]) {
 }
 
 
-bool executeSteps(DLLExecution * executor) {
+
+
+
+
+
+
+
+
+bool executeSteps(DLLExecution* executor) {
+
 	//Execute the four Pre-processing steps
 	if (!executor->executePreProcessingStep1(false)) {
 		std::cout << "Pre-processing step 1 failed!" << std::endl;
@@ -149,9 +158,9 @@ bool executeSteps(DLLExecution * executor) {
 	return true;
 }
 
-void drawFeatureDebugImage(IntensityImage &image, FeatureMap &features) {
+void drawFeatureDebugImage(IntensityImage& image, FeatureMap& features) {
 	RGB colorRed(244, 67, 54);
-	RGBImage * debug = ImageFactory::newRGBImage(image.getWidth(), image.getHeight());
+	RGBImage* debug = ImageFactory::newRGBImage(image.getWidth(), image.getHeight());
 	ImageIO::intensityToRGB(image, *debug);
 
 	//Nose
