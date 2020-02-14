@@ -18,15 +18,16 @@ int main(int argc, char* argv[]) {
 	ImageFactory::setImplementation(ImageFactory::DEFAULT);
 	//ImageFactory::setImplementation(ImageFactory::STUDENT);
 
-
-	ImageIO::debugFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\GitHub\\Vision\\HU-Vision-1819-Base\\output";
+	std::string matthijsDebugFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\Github\\Vision\\HU-VISION\\output";
+	std::string erikDebugFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\output";
+	ImageIO::debugFolder = erikDebugFolder;
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
 
-
-
+	std::string matthijsImageFolder;
+	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\Set A\\TestSet Images\\child-1.png";
 	RGBImage* input = ImageFactory::newRGBImage();
-	if (!ImageIO::loadImage("C:\\Users\\Matthijs Koelewijn\\Documents\\GitHub\\Vision\\HU-VISION\\testsets\\Set A\\TestSet Images\\female-3.png", *input)) {
+	if (!ImageIO::loadImage(erikImageFolder, *input)) {
 		std::cout << "Image could not be loaded!" << std::endl;
 		system("pause");
 		return 0;
