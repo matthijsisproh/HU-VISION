@@ -14,9 +14,8 @@ void drawFeatureDebugImage(IntensityImage& image, FeatureMap& features);
 bool executeSteps(DLLExecution* executor);
 
 int main(int argc, char* argv[]) {
-
-	//ImageFactory::setImplementation(ImageFactory::DEFAULT);
-	ImageFactory::setImplementation(ImageFactory::STUDENT);
+	ImageFactory::setImplementation(ImageFactory::DEFAULT);
+	//ImageFactory::setImplementation(ImageFactory::STUDENT);
 
 	std::string matthijsDebugFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\Github\\Vision\\HU-VISION\\output";
 	std::string erikDebugFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\output";
@@ -25,13 +24,13 @@ int main(int argc, char* argv[]) {
 
 
 	std::string matthijsImageFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\GitHub\\Vision\\HU-VISION\\testsets\\Set A\\TestSet Images\\test-1.png";
-	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\Set A\\TestSet Images\\test-1.png";
+	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\Set A\\TestSet Images\\female-3.png";
 	RGBImage * input = ImageFactory::newRGBImage();
 	if (!ImageIO::loadImage(erikImageFolder, *input)) {
 		std::cout << "Image could not be loaded!" << std::endl;
 		system("pause");
 		return 0;
-	}
+	} 
 
 
 	ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
@@ -62,7 +61,7 @@ int main(int argc, char* argv[]) {
 
 
 bool executeSteps(DLLExecution* executor) {
-
+	//ImageFactory::setImplementation(ImageFactory::STUDENT);
 	//Execute the four Pre-processing steps
 	if (!executor->executePreProcessingStep1(false)) {
 		std::cout << "Pre-processing step 1 failed!" << std::endl;
@@ -86,7 +85,7 @@ bool executeSteps(DLLExecution* executor) {
 		return false;
 	}
 	ImageIO::saveIntensityImage(*executor->resultPreProcessingStep4, ImageIO::getDebugFileName("Pre-processing-4.png"));
-
+	//ImageFactory::setImplementation(ImageFactory::DEFAULT);
 
 
 	//Execute the localization steps
