@@ -9,8 +9,11 @@ IntensityImage * StudentPreProcessing::stepScaleImage(const IntensityImage &imag
 	return nullptr;
 }
 
-IntensityImage * StudentPreProcessing::stepEdgeDetection(const IntensityImage &image) const {
-	return nullptr;
+IntensityImage* StudentPreProcessing::stepEdgeDetection(const IntensityImage& image) const {
+	std::cout << "hello world";
+	auto image2 = ImageFactory::newIntensityImage(image.getWidth(), image.getHeight());
+	*image2 = image;
+	return image2;
 }
 
 IntensityImage * StudentPreProcessing::stepThresholding(const IntensityImage &image) const {
