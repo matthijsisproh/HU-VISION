@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 
 
 	std::string matthijsImageFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\GitHub\\Vision\\HU-VISION\\testsets\\Set A\\TestSet Images\\test-1.png";
-	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\Set A\\TestSet Images\\female-3.png";
+	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\Set A\\TestSet Images\\child-1.png";
 	RGBImage * input = ImageFactory::newRGBImage();
 	if (!ImageIO::loadImage(erikImageFolder, *input)) {
 		std::cout << "Image could not be loaded!" << std::endl;

@@ -42,28 +42,30 @@ IntensityImage * DefaultPreProcessing::stepEdgeDetection(const IntensityImage &s
 	IntensityImage * ThoroughFloodThoroughFire = ImageFactory::newIntensityImage();
 	HereBeDragons::NoWantOfConscienceHoldItThatICall(OverParkOverPale, *ThoroughFloodThoroughFire);
 	return ThoroughFloodThoroughFire;*/
-
-	int kernel[9][9] = { {0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0}, 
+	int kernel[3][3] = { {0,1,0}, {1,-4,1}, {0,1,0} };
+	/*float kernel[9][9] = { {0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0}, 
 						{1,1,1,-4,-4,-4,1,1,1}, {1,1,1,-4,-4,-4,1,1,1}, {1,1,1,-4,-4,-4,1,1,1}, 
-						{0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0} };
-	//int kernel[3][3] = { {0,1,0}, {1,-4,1}, {0,1,0} };
-	auto* image2 = ImageFactory::newIntensityImage(src.getWidth(), src.getHeight());
-	int total = 0;
+						{0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0} };*/
+	/*float kernel[9][9] = { {0,1,1,2,2,2,1,1,0}, {1,2,4,5,5,5,4,2,1}, {1,4,5,3,0,3,5,4,1},
+						{2,5,3,-12,-24,-12,3,5,2}, {2,5,0,-24,-40,-24,0,5,2}, {2,5,3,-12,-24,-12,3,5,2},
+						{1,4,5,3,0,3,5,4,1}, {1,2,4,5,5,5,4,2,1}, {0,1,1,2,2,2,1,1,0} };*/
+	IntensityImage* image2 = ImageFactory::newIntensityImage(src.getWidth(), src.getHeight());
+	float total = 0;
 	//code for 9x9 kernel
-	for (unsigned int x = 4; x < src.getWidth() - 4; x++) {
-		for (unsigned int y = 4; y < src.getHeight() - 4; y++) {
+	/*for (float x = 4; x < src.getWidth() - 4; x++) {
+		for (float y = 4; y < src.getHeight() - 4; y++) {
 			total = 0;
-			for (unsigned int mx = 0; mx < 9; mx++) {
-				for (unsigned int my = 0; my < 9; my++) {
-					total += kernel[my][mx] * src.getPixel(x - 4 + mx, y - 4 + my);
+			for (int mx = 0; mx < 9; mx++) { 
+				for (int my = 0; my < 9; my++) {
+					total += kernel[my][mx] * src.getPixel((x - 4) + mx, (y - 4) + my);
 				}
 			}
 			image2->setPixel(x, y, 255 - abs(total));
 		}
-	}
+	}*/
 	
 	//code for 3x3 kernel
-	/*
+	
 	for (unsigned int x = 1; x < src.getWidth() - 1; x++) {
 		for (unsigned int y = 1; y < src.getHeight() - 1; y++) {
 			for (unsigned int mx = 0; mx < 3; mx++) {
@@ -74,7 +76,7 @@ IntensityImage * DefaultPreProcessing::stepEdgeDetection(const IntensityImage &s
 			image2->setPixel(x, y, 255- abs(total));
 			total = 0;
 		}
-	}*/
+	}
 
 
 	return image2;
