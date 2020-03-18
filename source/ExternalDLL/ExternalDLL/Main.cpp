@@ -24,9 +24,9 @@ int main(int argc, char* argv[]) {
 
 
 	std::string matthijsImageFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\GitHub\\Vision\\HU-VISION\\testsets\\Set A\\TestSet Images\\test-1.png";
-	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\Set A\\TestSet Images\\child-1.png";
+	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\TESTSET\\Face (2).jpg";
 	RGBImage * input = ImageFactory::newRGBImage();
-	if (!ImageIO::loadImage(erikImageFolder, *input)) {
+	/*if (!ImageIO::loadImage(erikImageFolder, *input)) {
 		std::cout << "Image could not be loaded!" << std::endl;
 		system("pause");
 		return 0;
@@ -37,16 +37,43 @@ int main(int argc, char* argv[]) {
 
 	DLLExecution* executor = new DLLExecution(input);
 
-
-	if (executeSteps(executor)) {
+		if (executeSteps(executor)) {
 		std::cout << "Face recognition successful!" << std::endl;
 		std::cout << "Facial parameters: " << std::endl;
 		for (int i = 0; i < 16; i++) {
 			std::cout << (i + 1) << ": " << executor->facialParameters[i] << std::endl;
 		}
+	}*/
+		
+	float total_values[16] = { 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 };
+	std::string path = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\TESTSET\\Face (";
+	for (unsigned int i = 1; i < 105; i++) {
+		if (!ImageIO::loadImage(path + std::to_string(i) + ").jpg", *input)) {
+			std::cout << "Image " << i << " could not be loaded!" << std::endl;
+			system("pause");
+			return 0;
+		}//OpenCV Error : Assertion failed(0 <= roi.x && 0 <= roi.width && roi.x + roi.width <= m.cols && 0 <= roi.y && 0 <= roi.height && roi.y + roi.height <= m.rows) in cv::Mat::Mat, file C : \ti - software\opencv - 2.4.12\opencv - 2.4.12\modules\core\src\matrix.cpp, line 323
+
+		DLLExecution* executor = new DLLExecution(input);
+		try {
+			if (executeSteps(executor)) {
+				for (int j = 0; j < 16; j++) {
+					total_values[j] += executor->facialParameters[j];
+				}
+			}
+		}
+		catch(std::exception & e){
+			std::cout << "HET GAAT FOUT OP  " << i << std::endl;
+		}
+
+		delete executor;
 	}
 
-	delete executor;
+	for (unsigned int i = 1; i < 16; i++) {
+		std::cout << i << ": " << total_values[i] / 100 << std::endl;
+	}
+
+
 	system("pause");
 	return 1;
 }

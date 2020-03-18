@@ -64,14 +64,14 @@ IntensityImage* StudentPreProcessing::stepEdgeDetection(const IntensityImage& im
 
 // Thresholding
 IntensityImage * StudentPreProcessing::stepThresholding(const IntensityImage &image) const {
-	float average_pixel = 0;
+	/*float average_pixel = 0;
 	for (unsigned int i = 0; i < image.getWidth(); i++) {
 		for (unsigned int j = 0; j < image.getHeight(); j++) {
 			average_pixel += image.getPixel(i, j);
 		}
 	}
 	average_pixel /= (image.getHeight() * image.getWidth());
-	std::cout << int(average_pixel);
+	std::cout << int(average_pixel);*/
 	IntensityImage* newImage = ImageFactory::newIntensityImage(image.getWidth(), image.getHeight());
 	//for all pixels
 	for (unsigned int x = 0; x < image.getWidth(); x++) {
