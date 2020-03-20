@@ -5,6 +5,7 @@
 */
 
 #include <iostream> //std::cout
+#include <ctime>
 #include "ImageIO.h" //Image load and save functionality
 #include "HereBeDragons.h"
 #include "ImageFactory.h"
@@ -17,49 +18,40 @@ int main(int argc, char* argv[]) {
 	ImageFactory::setImplementation(ImageFactory::DEFAULT);
 	//ImageFactory::setImplementation(ImageFactory::STUDENT);
 
-	std::string matthijsDebugFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\Github\\Vision\\HU-VISION\\output";
 	std::string erikDebugFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\output";
 	ImageIO::debugFolder = erikDebugFolder;
 	ImageIO::isInDebugMode = true; //If set to false the ImageIO class will skip any image save function calls
 
 
-	std::string matthijsImageFolder = "C:\\Users\\Matthijs Koelewijn\\Documents\\GitHub\\Vision\\HU-VISION\\testsets\\Set A\\TestSet Images\\test-1.png";
-	std::string erikImageFolder = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\TESTSET\\Face (2).jpg";
-	RGBImage * input = ImageFactory::newRGBImage();
-	/*if (!ImageIO::loadImage(erikImageFolder, *input)) {
-		std::cout << "Image could not be loaded!" << std::endl;
-		system("pause");
-		return 0;
-	} 
+	
 
-
-	ImageIO::saveRGBImage(*input, ImageIO::getDebugFileName("debug.png"));
-
-	DLLExecution* executor = new DLLExecution(input);
-
-		if (executeSteps(executor)) {
-		std::cout << "Face recognition successful!" << std::endl;
-		std::cout << "Facial parameters: " << std::endl;
-		for (int i = 0; i < 16; i++) {
-			std::cout << (i + 1) << ": " << executor->facialParameters[i] << std::endl;
+	float all5Totals[5] = { 0,0,0,0,0 };
+	std::string path = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\TESTSET\\";
+	time_t timeSinceStarted = time(NULL);
+	//pick all 100 pictures
+	for (unsigned int i = 1; i <= 100; i++) {
+		RGBImage* input = ImageFactory::newRGBImage();
+		//if the number is 28 or lower, load the png, else the jpg
+		if (i <= 28) {
+			if (!ImageIO::loadImage(path + std::to_string(i) + ".png", *input)) {
+				std::cout << "Image " << i << " could not be loaded!" << std::endl;
+				system("pause");
+				return 0;
+			}
+		}else {
+			if (!ImageIO::loadImage(path + "Face (" + std::to_string(i) + ").jpg", *input)) {
+				std::cout << "Image " << i << " could not be loaded!" << std::endl;
+				system("pause");
+				return 0;
+			}
 		}
-	}*/
-		
-	float total_values[16] = { 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 };
-	std::string path = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\TESTSET\\Face (";
-	for (unsigned int i = 1; i < 105; i++) {
-		if (!ImageIO::loadImage(path + std::to_string(i) + ").jpg", *input)) {
-			std::cout << "Image " << i << " could not be loaded!" << std::endl;
-			system("pause");
-			return 0;
-		}//OpenCV Error : Assertion failed(0 <= roi.x && 0 <= roi.width && roi.x + roi.width <= m.cols && 0 <= roi.y && 0 <= roi.height && roi.y + roi.height <= m.rows) in cv::Mat::Mat, file C : \ti - software\opencv - 2.4.12\opencv - 2.4.12\modules\core\src\matrix.cpp, line 323
 
+		//try the face recognition 
+		//if anything goes wrong continue with the next picture
 		DLLExecution* executor = new DLLExecution(input);
 		try {
 			if (executeSteps(executor)) {
-				for (int j = 0; j < 16; j++) {
-					total_values[j] += executor->facialParameters[j];
-				}
+				all5Totals[i / 20] ++;
 			}
 		}
 		catch(std::exception & e){
@@ -67,11 +59,16 @@ int main(int argc, char* argv[]) {
 		}
 
 		delete executor;
-	}
+		delete input;
 
-	for (unsigned int i = 1; i < 16; i++) {
-		std::cout << i << ": " << total_values[i] / 100 << std::endl;
+
 	}
+	//print the results
+	for (unsigned int i = 0; i < 5; i++) {
+		std::cout << "total faces identified at part " + std::to_string(i + 1) + " = " + std::to_string(all5Totals[i]) << std::endl;
+	}
+	//print the time it took
+	std::cout << "time passed in seconds = " << time(NULL) - timeSinceStarted;
 
 
 	system("pause");

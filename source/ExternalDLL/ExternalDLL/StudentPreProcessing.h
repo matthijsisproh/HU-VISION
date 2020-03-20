@@ -18,5 +18,6 @@ public:
 private:
 	//function that will apply a filter to an image
 	//filter has to be square and uneven sized
+	//function is not used anymore but it is useful to quickly test a filter
 	IntensityImage* applyFilterToImage(const IntensityImage& image, const std::vector<std::vector<int>>& filter, int divide_factor = 1) const;
 };

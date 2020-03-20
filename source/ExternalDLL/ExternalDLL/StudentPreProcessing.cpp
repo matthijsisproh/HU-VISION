@@ -34,31 +34,68 @@ IntensityImage * StudentPreProcessing::stepScaleImage(const IntensityImage &imag
 
 // Edge Detection
 IntensityImage* StudentPreProcessing::stepEdgeDetection(const IntensityImage& image) const {
-	float total = 0;
-	//std::vector<std::vector<int>> gaussian_smoother = { {1,4,7,4,1}, {4,16,26,16,4}, {7,26,41,26,7}, {4,16,26,16,4}, {1,4,7,4,1} };
-	std::vector<std::vector<int>> gaussian_smoother = { {1,2,1}, {2,4,2}, {1,2,1} };
-	
-	//IntensityImage* gaussian_smoothed_image = applyFilterToImage(image, gaussian_smoother, 16);
-
-	std::vector<std::vector<int>> kernel_horizontal = { {-1,-1,-1}, {0,0,0}, {1,1,1} };
-	std::vector<std::vector<int>> kernel_vertical = { {-1,0,1}, {-1,0,1}, {-1,0,1} };
-	/*float kernel[9][9] = { {0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0},
-						{1,1,1,-4,-4,-4,1,1,1}, {1,1,1,-4,-4,-4,1,1,1}, {1,1,1,-4,-4,-4,1,1,1},
-						{0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0}, {0,0,0,1,1,1,0,0,0} };*/
-	/*float kernel[9][9] = { {0,1,1,2,2,2,1,1,0}, {1,2,4,5,5,5,4,2,1}, {1,4,5,3,0,3,5,4,1},
-						{2,5,3,-12,-24,-12,3,5,2}, {2,5,0,-24,-40,-24,0,5,2}, {2,5,3,-12,-24,-12,3,5,2},
-						{1,4,5,3,0,3,5,4,1}, {1,2,4,5,5,5,4,2,1}, {0,1,1,2,2,2,1,1,0} };*/
 	IntensityImage* image2 = ImageFactory::newIntensityImage(image.getWidth(), image.getHeight());
+	int width = image2->getWidth();
+	int height = image2->getHeight();
 
-	//code for 3x3 kernel
-	IntensityImage* imageHorizontalEdges = applyFilterToImage(image, kernel_horizontal);
-	IntensityImage* imageVerticalEdges = applyFilterToImage(image, kernel_vertical);
+	//code that will optimise the algorithm that applies the horizontal filter on the image and stores it in a new image
+	int values[3] = { 0,0,0 };
+	uint_fast8_t valueToCalculate = 2;
+	IntensityImage* imageHorizontalEdges = ImageFactory::newIntensityImage(width, height);
+	for (unsigned int x = 1; x < width - 1; x++) {
+		//calculate the first two horizontal values
+		values[0] = -1 * image.getPixel(x - 1, 0) + image.getPixel(x + 1, 0);
+		values[1] = -1 * image.getPixel(x - 1, 1) + image.getPixel(x + 1, 1);
+		valueToCalculate = 2;
+		//then, only calculate one each time, delete one that is not needed anymore and add all values together 
+		for (unsigned int y = 1; y < height - 1; y++) {
+			values[valueToCalculate] = -1 * image.getPixel(x - 1, y + 1) + image.getPixel(x + 1, y + 1);
+			imageHorizontalEdges->setPixel(x, y, abs(values[0] + values[1] + values[2]));
+			if (valueToCalculate == 2) {
+				valueToCalculate = 0;
+			}else {
+				valueToCalculate++;
+			}
+		}
+	}
 
-	for (unsigned int i = 0; i < image.getWidth(); i++) {
-		for (unsigned int j = 0; j < image.getHeight(); j++) {
+	//same as above but for the the vertical filter
+	IntensityImage* imageVerticalEdges = ImageFactory::newIntensityImage(width, height);
+	for (unsigned int y = 1; y < height - 1; y++) {
+		values[0] = -1 * image.getPixel(0, y - 1) + image.getPixel(0, y + 1);
+		values[1] = -1 * image.getPixel(1, y - 1) + image.getPixel(1, y + 1);
+		valueToCalculate = 2;
+		for (unsigned int x = 1; x < width - 1; x++) {
+			values[valueToCalculate] = -1 * image.getPixel(x + 1, y - 1) + image.getPixel(x + 1, y + 1);
+			imageVerticalEdges->setPixel(x, y, abs(values[0] + values[1] + values[2]));
+			if (valueToCalculate == 2) {
+				valueToCalculate = 0;
+			}
+			else {
+				valueToCalculate++;
+			}
+		}
+	}
+	//then combine the two images to the finale image
+	for (unsigned int i = 0; i < width; i++) {
+		for (unsigned int j = 0; j < height; j++) {
 			image2->setPixel(i, j, 255 - sqrt(imageHorizontalEdges->getPixel(i, j) * imageHorizontalEdges->getPixel(i, j) + imageVerticalEdges->getPixel(i, j) * imageVerticalEdges->getPixel(i, j)));
 		}
 	}
+
+	//make the sides and edges of the picture white
+	for (unsigned int i = 0; i < height; i++) {
+		image2->setPixel(0, i, 255);
+		image2->setPixel(width - 1, i, 255);
+	}
+	for (unsigned int i = 1; i < width - 1; i++) {
+		image2->setPixel(i, 0, 255);
+		image2->setPixel(i, height - 1, 255);
+	}
+
+	//delete all allocated images
+	delete imageHorizontalEdges;
+	delete imageVerticalEdges;
 	return image2;
 }
 
