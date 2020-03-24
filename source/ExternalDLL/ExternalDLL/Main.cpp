@@ -28,24 +28,15 @@ int main(int argc, char* argv[]) {
 	float all5Totals[5] = { 0,0,0,0,0 };
 	std::string path = "C:\\Users\\erikd\\Documents\\GitHub\\HU-VISION\\testsets\\TESTSET\\";
 	time_t timeSinceStarted = time(NULL);
-	//pick all 100 pictures
+	//load and try all 100 pictures
 	for (unsigned int i = 1; i <= 100; i++) {
 		RGBImage* input = ImageFactory::newRGBImage();
-		//if the number is 28 or lower, load the png, else the jpg
-		if (i <= 28) {
-			if (!ImageIO::loadImage(path + std::to_string(i) + ".png", *input)) {
-				std::cout << "Image " << i << " could not be loaded!" << std::endl;
-				system("pause");
-				return 0;
-			}
-		}else {
-			if (!ImageIO::loadImage(path + "Face (" + std::to_string(i) + ").jpg", *input)) {
-				std::cout << "Image " << i << " could not be loaded!" << std::endl;
-				system("pause");
-				return 0;
-			}
+		if (!ImageIO::loadImage(path + std::to_string(i) + ".png", *input)) {
+			std::cout << "Image " << i << " could not be loaded!" << std::endl;
+			system("pause");
+			return 0;
 		}
-
+		
 		//try the face recognition 
 		//if anything goes wrong continue with the next picture
 		DLLExecution* executor = new DLLExecution(input);
